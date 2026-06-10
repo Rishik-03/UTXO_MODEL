@@ -1,123 +1,263 @@
 # CS216 – Blockchain Simulation Assignment (UTXO Model)
 
-Team name - "Strange coins"
-Team members:
-1)CharanKumar   - 240001057
-2)Shiv pratap   - 240001069
-3)Rishik        - 240003027
-4)Aravind Nayak - 240003082
+## Team Name
 
-## Overview
-This project is a simplified blockchain simulation implemented in **C++** using the **UTXO (Unspent Transaction Output)** model.  
-It demonstrates how transactions are created, validated, stored in a mempool, mined into blocks, and how balances are updated securely.
+**Strange Coins**
 
-The implementation follows a **modular design**, where each blockchain component is separated into its own header (`.h`) and source (`.cpp`) file.
+## Team Members
+
+| Name          | Roll Number |
+| ------------- | ----------- |
+| Charan Kumar  | 240001057   |
+| Shiv Pratap   | 240001069   |
+| Rishik        | 240003027   |
+| Aravind Nayak | 240003082   |
 
 ---
 
-## Repository Structure
+# Overview
+
+This project is a simplified blockchain simulation implemented in **C++** using the **UTXO (Unspent Transaction Output)** model.
+
+The project demonstrates:
+
+* Transaction creation
+* Transaction validation
+* Mempool management
+* Block mining
+* UTXO updates
+* Balance tracking
+
+The implementation follows a **modular design**, where each blockchain component is separated into its own header (`.h`) and source (`.cpp`) files.
+
+---
+
+# Repository Structure
+
+```text
 CS216/
 │
 ├── src/
-│ ├── main.cpp # Entry point of the program
-│ ├── utxo_manager.h/.cpp # UTXO set management
-│ ├── transaction.h # Transaction structure
-│ ├── mempool.h/.cpp # Pending transaction pool
-│ ├── validator.h/.cpp # Transaction validation logic
-│ ├── miner.h/.cpp # Mining and block reward logic
+│   ├── main.cpp
+│   ├── utxo_manager.h
+│   ├── utxo_manager.cpp
+│   ├── transaction.h
+│   ├── mempool.h
+│   ├── mempool.cpp
+│   ├── validator.h
+│   ├── validator.cpp
+│   ├── miner.h
+│   └── miner.cpp
 │
 ├── tests/
-│ ├── tests.h/.cpp # All 10 mandatory test scenarios
+│   ├── tests.h
+│   └── tests.cpp
 │
 ├── .gitignore
 ├── README.md
 ├── requirements.txt
-├── sample_output.txt
+└── sample_output.txt
+```
 
 ---
 
-## Design Explanation (Core Components)
+# Core Components
 
-### 1. UTXO Manager (`utxo_manager`)
-- Maintains a map of all **unspent outputs**
-- Key: `(transaction_id, output_index)`
-- Value: `{amount, owner}`
-- Responsibilities:
-  - Add UTXOs after mining
-  - Remove UTXOs when spent
-  - Calculate balance of any user
-  - Track ownership securely
+## 1. UTXO Manager (`utxo_manager`)
 
- **Why UTXO?**  
-UTXO ensures no double spending and allows simple balance calculation by summing unspent outputs.
+Maintains the set of all **Unspent Transaction Outputs (UTXOs)**.
 
----
+### Responsibilities
 
-### 2. Transaction (`transaction`)
-- Represents a transaction with:
-  - Inputs (references to previous UTXOs)
-  - Outputs (new owners + amounts)
-  - Transaction ID
-- Transactions are immutable once created.
+* Add UTXOs after mining
+* Remove spent UTXOs
+* Calculate balances
+* Track ownership
 
----
+### Data Structure
 
-### 3. Validator (`validator`)
-- Verifies transactions before entering the mempool:
-  - Checks if referenced UTXOs exist
-  - Ensures sender owns the UTXOs
-  - Prevents double spending
-  - Ensures total input ≥ total output
+```text
+Key   : (transaction_id, output_index)
+Value : {amount, owner}
+```
 
- Invalid transactions are **rejected immediately**.
+### Why UTXO?
+
+The UTXO model:
+
+* Prevents double spending
+* Enables efficient balance calculation
+* Provides simple ownership tracking
 
 ---
 
-### 4. Mempool (`mempool`)
-- Temporary holding area for **valid but unmined transactions**
-- Only validated transactions are added
-- Cleared once a block is mined
+## 2. Transaction (`transaction`)
+
+Represents a blockchain transaction.
+
+### Components
+
+* Transaction ID
+* Inputs (references to existing UTXOs)
+* Outputs (new UTXOs)
+
+Transactions become immutable once created.
 
 ---
 
-### 5. Miner (`miner`)
-- Selects transactions from the mempool
-- Applies them to the UTXO set
-- Creates a **coinbase transaction**
-- Rewards miner with block reward
+## 3. Validator (`validator`)
 
- Miner earns by receiving newly created UTXOs (block reward).
+Verifies transactions before they enter the mempool.
 
----
+### Validation Checks
 
-### 6. Test Scenarios (`tests`)
-- Contains **10 mandatory test cases**
-- Each test is labeled clearly (e.g., *Test 1 – Valid Transaction*)
-- User can:
-  - Run a single test
-  - Run all tests together
-- Tests verify:
-  - Balance updates
-  - Validation failures
-  - Mempool behavior
-  - Miner rewards
+* Referenced UTXOs exist
+* Sender owns referenced UTXOs
+* No double spending
+* Total Input ≥ Total Output
+
+### Result
+
+* Valid transactions are accepted
+* Invalid transactions are rejected immediately
 
 ---
 
-## Program Flow
-1. Initialize UTXO set with genesis balances
-2. User selects test scenario
-3. Transactions are created
-4. Validator checks transactions
-5. Valid transactions enter mempool
-6. Miner mines a block
-7. UTXO set updates
-8. Balances are printed
+## 4. Mempool (`mempool`)
+
+Stores valid transactions waiting to be mined.
+
+### Responsibilities
+
+* Accept validated transactions
+* Hold pending transactions
+* Clear transactions after block creation
 
 ---
 
-## Compilation Instructions
-Run from the **project root directory**:
+## 5. Miner (`miner`)
 
---- To run the code ----
-g++ -std=gnu++17 src/main.cpp src/utxo_manager.cpp src/mempool.cpp src/validator.cpp src/miner.cpp tests/tests.cpp -o blockchain && blockchain
+Creates blocks from mempool transactions.
+
+### Responsibilities
+
+* Select transactions from mempool
+* Update UTXO set
+* Create coinbase transaction
+* Award mining reward
+
+### Mining Reward
+
+The miner receives newly created UTXOs through the coinbase transaction.
+
+---
+
+## 6. Test Scenarios (`tests`)
+
+Contains all **10 mandatory test cases**.
+
+### Features
+
+* Run a specific test
+* Run all tests together
+
+### Tests Verify
+
+* Balance updates
+* Validation logic
+* Double-spending prevention
+* Mempool behavior
+* Mining rewards
+
+---
+
+# Program Flow
+
+```text
+Genesis UTXOs
+      │
+      ▼
+Create Transaction
+      │
+      ▼
+Validate Transaction
+      │
+      ▼
+Add to Mempool
+      │
+      ▼
+Mine Block
+      │
+      ▼
+Update UTXO Set
+      │
+      ▼
+Display Balances
+```
+
+---
+
+# Compilation Instructions
+
+Run the following command from the project root directory:
+
+```bash
+g++ -std=gnu++17 \
+src/main.cpp \
+src/utxo_manager.cpp \
+src/mempool.cpp \
+src/validator.cpp \
+src/miner.cpp \
+tests/tests.cpp \
+-o blockchain
+```
+
+---
+
+# Running the Program
+
+```bash
+./blockchain
+```
+
+For Windows:
+
+```bash
+blockchain.exe
+```
+
+---
+
+# Features Implemented
+
+✔ UTXO-based ledger
+
+✔ Transaction validation
+
+✔ Double-spending prevention
+
+✔ Mempool management
+
+✔ Block mining
+
+✔ Coinbase rewards
+
+✔ Balance tracking
+
+✔ Modular C++ architecture
+
+✔ Automated test scenarios
+
+✔ Genesis balance initialization
+
+---
+
+# Sample Output
+
+Refer to:
+
+```text
+sample_output.txt
+```
+
+for example execution results and test outputs.
