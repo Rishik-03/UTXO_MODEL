@@ -8,8 +8,8 @@
 
 | Name          | Roll Number |
 | ------------- | ----------- |
-| Charan Kumar  | 240001057   |
 | Shiv Pratap   | 240001069   |
+| Charan Kumar  | 240001057   |
 | Rishik        | 240003027   |
 | Aravind Nayak | 240003082   |
 
