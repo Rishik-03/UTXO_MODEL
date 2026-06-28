@@ -17,7 +17,7 @@
 
 # Overview
 
-This project is a simplified blockchain simulation implemented in **C++** using the **UTXO (Unspent Transaction Output)** model.
+This project is  simplified blockchain simulation implemented in **C++** using the **UTXO (Unspent Transaction Output)** model.
 
 The project demonstrates:
 
